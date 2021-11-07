@@ -1,5 +1,5 @@
 # Installation
-[![PkgGoDev](https://pkg.go.dev/github.com/IndominusByte/magicimage)](https://pkg.go.dev/github.com/IndominusByte/magicimage)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/IndominusByte/magicimage)](https://pkg.go.dev/github.com/IndominusByte/magicimage)
 [![Test](https://github.com/IndominusByte/magicimage/actions/workflows/test.yml/badge.svg)](https://github.com/IndominusByte/magicimage/actions/workflows/test.yml)
 [![Coverage Status](https://coveralls.io/repos/github/IndominusByte/magicimage/badge.svg?branch=main)](https://coveralls.io/github/IndominusByte/magicimage?branch=main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/IndominusByte/magicimage)](https://goreportcard.com/report/github.com/IndominusByte/magicimage)
