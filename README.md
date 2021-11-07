@@ -1,4 +1,6 @@
 # Installation
+[![Go Report Card](https://goreportcard.com/badge/github.com/IndominusByte/magicimage)](https://goreportcard.com/report/github.com/IndominusByte/magicimage)
+
 ```go
 go get github.com/IndominusByte/magicimage
 ```
