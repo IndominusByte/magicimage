@@ -11,15 +11,15 @@ A few usage examples can be found below. See the documentation for the full list
 ```go
 var SingleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request) {
 	magic := magicimage.New(r, 32 << 20)
-    // magic.SetRequired(false)
-    // magic.SetMaxFileSize(4 << 20) 4 MB
+  // magic.SetRequired(false)
+  // magic.SetMaxFileSize(4 << 20) 4 MB
 
 	if err := magic.ValidateSingleImage("file"); err != nil {
 		fmt.Fprint(rw, err)
 		return
 	}
 
-    magic.SaveImages(200, 200, "out/this-is-slug", true)
+  magic.SaveImages(200, 200, "out/this-is-slug", true)
 
 	fmt.Fprint(rw, "success")
 }
@@ -37,7 +37,7 @@ var MultipleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Reques
 		return
 	}
 
-    magic.SaveImages(200, 200, "out/this-is-slug", true)
+  magic.SaveImages(200, 200, "out/this-is-slug", true)
 
 	fmt.Fprint(rw, "success")
 }
