@@ -170,12 +170,12 @@ func (magic *MagicImage) ValidateMultipleImage(key string) error {
 		// validate images
 		ext, valid := magic.isValidImage(value)
 		if !valid {
-			return errors.New(fmt.Sprintf("The image at index %d must be between %s.", index, strings.Join(magic.AllowExt, ", ")))
+			return errors.New(fmt.Sprintf("The image at index %d must be between %s.", index+1, strings.Join(magic.AllowExt, ", ")))
 		}
 
 		// validation size image
 		if value.Size > int64(magic.MaxFileSize) {
-			return errors.New(fmt.Sprintf("An image at index %d cannot greater than %c Mb.", index, strconv.Itoa(magic.MaxFileSize)[0]))
+			return errors.New(fmt.Sprintf("An image at index %d cannot greater than %c Mb.", index+1, strconv.Itoa(magic.MaxFileSize)[0]))
 		}
 
 		magic.appendImageHash(ext, value)
