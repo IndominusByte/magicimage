@@ -31,6 +31,11 @@ type MagicImage struct {
 	Files              []*multipart.FileHeader
 }
 
+// New returns a new blank MagicImage instance.
+// By default the configuration is:
+// - AllowExt:	jpeg, png
+// - MaxFileSize: 4 MB
+// - Required: true
 func New(Request *http.Request, MaxMultipartMemory int) *MagicImage {
 	magic_image := &MagicImage{
 		Request:            Request,
@@ -42,22 +47,27 @@ func New(Request *http.Request, MaxMultipartMemory int) *MagicImage {
 	return magic_image
 }
 
+// SetAllowExt set the MagicImage.AllowExt used in ValidateSingleImage & ValidateMultipleImage
 func (magic *MagicImage) SetAllowExt(value []string) {
 	magic.AllowExt = value
 }
 
+// SetMaxFileSize set the MagicImage.MaxFileSize used in ValidateSingleImage & ValidateMultipleImage
 func (magic *MagicImage) SetMaxFileSize(value int) {
 	magic.MaxFileSize = value
 }
 
+// SetRequired set the MagicImage.Required used in ValidateSingleImage & ValidateMultipleImage
 func (magic *MagicImage) SetRequired(value bool) {
 	magic.Required = value
 }
 
+// SetMinFileInSlice set the MagicImage.MinFileInSlice used in ValidateMultipleImage
 func (magic *MagicImage) SetMinFileInSlice(value int) {
 	magic.MinFileInSlice = value
 }
 
+// SetMaxFileInSlice set the MagicImage.MaxFileInSlice used in ValidateMultipleImage
 func (magic *MagicImage) SetMaxFileInSlice(value int) {
 	magic.MaxFileInSlice = value
 }
@@ -118,6 +128,7 @@ func (magic *MagicImage) findDuplicateImage() bool {
 	return false
 }
 
+// validator for single image.
 func (magic *MagicImage) ValidateSingleImage(key string) error {
 	err := magic.Request.ParseMultipartForm(int64(magic.MaxMultipartMemory))
 	if err != nil {
@@ -150,6 +161,7 @@ func (magic *MagicImage) ValidateSingleImage(key string) error {
 	return nil
 }
 
+// validator for multiple image with addon feature all image must be unique.
 func (magic *MagicImage) ValidateMultipleImage(key string) error {
 	err := magic.Request.ParseMultipartForm(int64(magic.MaxMultipartMemory))
 	if err != nil {
@@ -297,6 +309,7 @@ func (magic *MagicImage) resizeImageAndSave(width, height int, filename string, 
 	imaging.Save(imgResult, filename)
 }
 
+// save image for single image & multiple image with feature fix orientation iphone & create dir when doesn't exists.
 func (magic *MagicImage) SaveImages(width, height int, path_upload string, square bool) error {
 	for _, value := range magic.Files {
 		ext, _ := magic.isValidImage(value)

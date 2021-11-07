@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// rename dir or file and check if doesn't exists
 func RenameFolderAndFile(old_path, new_path string) error {
 	// check directory or file exists
 	if _, err := os.Stat(old_path); errors.Is(err, os.ErrNotExist) {
@@ -20,6 +21,7 @@ func RenameFolderAndFile(old_path, new_path string) error {
 	return nil
 }
 
+// remove dir or file and check if doesn't exists
 func DeleteFolderAndFile(path string) error {
 	// check directory or file exists
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
