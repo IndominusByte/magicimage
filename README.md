@@ -15,9 +15,12 @@ A few usage examples can be found below. See the documentation for the full list
 ### Validation Single Image
 ```go
 var SingleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request) {
-	magic := magicimage.New(r, 32 << 20)
-  // magic.SetRequired(false)
-  // magic.SetMaxFileSize(4 << 20) 4 MB
+  r.ParseMultipartForm(32 << 20)
+
+	magic := magicimage.New(r.MultipartForm)
+
+  // magic.Required = false
+  // magic.MaxFileSize = 4 << 20 (4MB)
 
 	if err := magic.ValidateSingleImage("file"); err != nil {
 		fmt.Fprint(rw, err)
@@ -33,9 +36,12 @@ var SingleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request)
 ### Validation Multiple Image
 ```go
 var MultipleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request) {
-	magic := New(r, 32 << 20)
-	// magic.SetMinFileInSlice(1)
-	// magic.SetMaxFileInSlice(10)
+  r.ParseMultipartForm(32 << 20)
+
+	magic := magicimage.New(r.MultipartForm)
+
+  // magic.MinFileInSlice = 1
+  // magic.MaxFileInSlice = 10
 
 	if err := magic.ValidateMultipleImage("files"); err != nil {
 		fmt.Fprint(rw, err)
