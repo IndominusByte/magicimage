@@ -20,15 +20,14 @@ import (
 )
 
 type MagicImage struct {
-	Request            *http.Request
-	AllowExt           []string
-	MaxFileSize        int
-	MaxMultipartMemory int
-	Required           bool
-	DuplicateImage     []uint64
-	MinFileInSlice     int
-	MaxFileInSlice     int
-	Files              []*multipart.FileHeader
+	MultipartForm  *multipart.Form
+	AllowExt       []string
+	MaxFileSize    int
+	Required       bool
+	DuplicateImage []uint64
+	MinFileInSlice int
+	MaxFileInSlice int
+	Files          []*multipart.FileHeader
 }
 
 // New returns a new blank MagicImage instance.
@@ -36,40 +35,13 @@ type MagicImage struct {
 // - AllowExt:	jpeg, png
 // - MaxFileSize: 4 MB
 // - Required: true
-func New(Request *http.Request, MaxMultipartMemory int) *MagicImage {
-	magic_image := &MagicImage{
-		Request:            Request,
-		AllowExt:           []string{"jpeg", "png"},
-		MaxMultipartMemory: MaxMultipartMemory,
-		MaxFileSize:        4 << 20, // 4 MB
-		Required:           true,
+func New(MultipartForm *multipart.Form) *MagicImage {
+	return &MagicImage{
+		MultipartForm: MultipartForm,
+		AllowExt:      []string{"jpeg", "png"},
+		MaxFileSize:   4 << 20, // 4 MB
+		Required:      true,
 	}
-	return magic_image
-}
-
-// SetAllowExt set the MagicImage.AllowExt used in ValidateSingleImage & ValidateMultipleImage
-func (magic *MagicImage) SetAllowExt(value []string) {
-	magic.AllowExt = value
-}
-
-// SetMaxFileSize set the MagicImage.MaxFileSize used in ValidateSingleImage & ValidateMultipleImage
-func (magic *MagicImage) SetMaxFileSize(value int) {
-	magic.MaxFileSize = value
-}
-
-// SetRequired set the MagicImage.Required used in ValidateSingleImage & ValidateMultipleImage
-func (magic *MagicImage) SetRequired(value bool) {
-	magic.Required = value
-}
-
-// SetMinFileInSlice set the MagicImage.MinFileInSlice used in ValidateMultipleImage
-func (magic *MagicImage) SetMinFileInSlice(value int) {
-	magic.MinFileInSlice = value
-}
-
-// SetMaxFileInSlice set the MagicImage.MaxFileInSlice used in ValidateMultipleImage
-func (magic *MagicImage) SetMaxFileInSlice(value int) {
-	magic.MaxFileInSlice = value
 }
 
 func (magic *MagicImage) inAllowExt(key string) (string, bool) {
@@ -130,12 +102,7 @@ func (magic *MagicImage) findDuplicateImage() bool {
 
 // validator for single image.
 func (magic *MagicImage) ValidateSingleImage(key string) error {
-	err := magic.Request.ParseMultipartForm(int64(magic.MaxMultipartMemory))
-	if err != nil {
-		return err
-	}
-
-	fhs := magic.Request.MultipartForm.File[key]
+	fhs := magic.MultipartForm.File[key]
 
 	if !magic.Required && len(fhs) == 0 {
 		return nil
@@ -163,12 +130,7 @@ func (magic *MagicImage) ValidateSingleImage(key string) error {
 
 // validator for multiple image with addon feature all image must be unique.
 func (magic *MagicImage) ValidateMultipleImage(key string) error {
-	err := magic.Request.ParseMultipartForm(int64(magic.MaxMultipartMemory))
-	if err != nil {
-		return err
-	}
-
-	fhs := magic.Request.MultipartForm.File[key]
+	fhs := magic.MultipartForm.File[key]
 
 	if !magic.Required && len(fhs) == 0 {
 		return nil

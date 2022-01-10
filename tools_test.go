@@ -16,38 +16,42 @@ import (
 )
 
 var SetValue http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request) {
-	magic := New(r, 32<<20)
+	r.ParseMultipartForm(32 << 20)
+
+	magic := New(r.MultipartForm)
 
 	switch r.Header.Get("set-func") {
 	case "allowext":
-		magic.SetAllowExt([]string{"gif", "png"})
+		magic.AllowExt = []string{"gif", "png"}
 		fmt.Fprint(rw, strings.Join(magic.AllowExt, ","))
 		return
 	case "maxfilesize":
-		magic.SetMaxFileSize(1)
+		magic.MaxFileSize = 1
 		fmt.Fprint(rw, magic.MaxFileSize)
 		return
 	case "required":
-		magic.SetRequired(false)
+		magic.Required = false
 		fmt.Fprint(rw, magic.Required)
 		return
 	case "minfileinslize":
-		magic.SetMinFileInSlice(2)
+		magic.MinFileInSlice = 2
 		fmt.Fprint(rw, magic.MinFileInSlice)
 		return
 	case "maxfileinslice":
-		magic.SetMaxFileInSlice(10)
+		magic.MaxFileInSlice = 10
 		fmt.Fprint(rw, magic.MaxFileInSlice)
 		return
 	}
 }
 
 var SingleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request) {
-	magic := New(r, 32<<20)
+	r.ParseMultipartForm(32 << 20)
+
+	magic := New(r.MultipartForm)
 
 	switch r.Header.Get("set-func") {
 	case "required":
-		magic.SetRequired(false)
+		magic.Required = false
 	}
 
 	if err := magic.ValidateSingleImage("file"); err != nil {
@@ -59,13 +63,15 @@ var SingleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request)
 }
 
 var MultipleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request) {
-	magic := New(r, 32<<20)
-	magic.SetMinFileInSlice(2)
-	magic.SetMaxFileInSlice(3)
+	r.ParseMultipartForm(32 << 20)
+
+	magic := New(r.MultipartForm)
+	magic.MinFileInSlice = 2
+	magic.MaxFileInSlice = 3
 
 	switch r.Header.Get("set-func") {
 	case "required":
-		magic.SetRequired(false)
+		magic.Required = false
 	}
 
 	if err := magic.ValidateMultipleImage("files"); err != nil {
@@ -77,7 +83,10 @@ var MultipleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Reques
 }
 
 var SaveImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request) {
-	magic := New(r, 32<<20)
+	r.ParseMultipartForm(32 << 20)
+
+	magic := New(r.MultipartForm)
+
 	if err := magic.ValidateMultipleImage("files"); err != nil {
 		fmt.Fprint(rw, err)
 		return
