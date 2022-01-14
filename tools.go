@@ -28,6 +28,7 @@ type MagicImage struct {
 	MinFileInSlice int
 	MaxFileInSlice int
 	Files          []*multipart.FileHeader
+	FileNames      []string
 }
 
 // New returns a new blank MagicImage instance.
@@ -269,6 +270,9 @@ func (magic *MagicImage) resizeImageAndSave(width, height int, filename string, 
 
 	os.Remove(filename)
 	imaging.Save(imgResult, filename)
+	// save filename
+	SFilename := strings.Split(filename, "/")
+	magic.FileNames = append(magic.FileNames, SFilename[len(SFilename)-1])
 }
 
 // save image for single image & multiple image with feature fix orientation iphone & create dir when doesn't exists.

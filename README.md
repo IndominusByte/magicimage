@@ -28,6 +28,8 @@ var SingleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Request)
 	}
 
   magic.SaveImages(200, 200, "out/this-is-slug", true)
+  // all filename
+  fmt.Println(magic.FileNames)
 
 	fmt.Fprint(rw, "success")
 }
@@ -49,6 +51,8 @@ var MultipleImage http.HandlerFunc = func(rw http.ResponseWriter, r *http.Reques
 	}
 
   magic.SaveImages(200, 200, "out/this-is-slug", true)
+  // all filename
+  fmt.Println(magic.FileNames)
 
 	fmt.Fprint(rw, "success")
 }
